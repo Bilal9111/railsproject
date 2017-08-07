@@ -11,12 +11,30 @@ gem 'rails', '~> 5.1.2'
 # Use sqlite3 as the database for Active Record
 
 
+###
+
+
+#the gems in this group correspond to images
+
+# the gem below is for image upload
+gem 'carrierwave',             '1.1.0'
+# the gem below is for image resizing
+gem 'mini_magick',             '4.7.0'
+# the gem below is for image upload in production
+gem 'fog',                     '1.40.0'
+
+
+###
+
+
+
 gem 'will_paginate',           '3.1.5'
 
 gem 'bootstrap-will_paginate', '1.0.0'
 
 gem 'bcrypt', '3.1.11'
 
+# the gem below is used for producing data fast...for example user names or book titles ...etc
 gem 'faker',          '1.7.3'
 
 gem 'bootstrap-sass', '3.3.7'
@@ -58,6 +76,7 @@ group :development, :test do
 end
 group :production do
   gem 'pg', '0.18.4'
+  gem 'unicorn'
 end
 
 group :development do

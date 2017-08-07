@@ -2,7 +2,7 @@ class UsersController < ApplicationController
   before_action :logged_in_user, only: [:edit, :update, :index, :delete]
   before_action :correct_user,   only: [:edit, :update]
   before_action :admin_user,     only: :destroy
-  before_action :is_activated?,  only: :show
+  before_action :is_activated,  only: :show
 
 
 
@@ -13,6 +13,8 @@ class UsersController < ApplicationController
   end
   def show
   	@user = User.find(params[:id])
+    @count = @user.micropost.count
+    @microposts = @user.micropost.paginate(page: params[:page])
   	#debugger
   end
   def create
@@ -53,12 +55,12 @@ class UsersController < ApplicationController
   end
   private
     #This method helps to make sure that only the activated users can be SHOWN
-    def is_activated?
-      @user = params[:activated?]
+    def is_activated
+      @user = User.find(params[:id])
       if @user
         #if is activated then dont do anything
       else
-        flash[:success] = "The user requested is not activated.If this is your account, then please check your email. :)"
+        flash[:failure] = "The user requested is not activated.If this is your account, then please check your email. :)"
         redirect_to root_url
        end
     end

@@ -1,10 +1,12 @@
 class User < ApplicationRecord
-  attr_accessor :remember_token, :activation_token
+  attr_accessor :remember_token, :activation_token, :reset_token
   before_save   :downcase_email
   before_create :create_activation_digest
 
-
-
+  # this produces a dependancy b/w this and 
+  # microposts so that microposts are deleted when
+  # the user is deleted.
+  has_many :micropost, dependent: :destroy
 
 
   validates :name, presence: true, length: {maximum: 50}
@@ -18,7 +20,13 @@ class User < ApplicationRecord
 
 
 
-
+  # Defines a proto-feed.
+  # See "Following users" for the full implementation.
+  # the ? mark below makes sure that the id is 
+  # properly escaped before its input into the expression so that there is no sql injection problem
+  def feed
+    Micropost.where("user_id = ?", self.id)
+  end
 
 # Returns the hash digest of the given string.
   def User.digest(string)
@@ -42,6 +50,11 @@ class User < ApplicationRecord
     digest = send("#{attribute}_digest")
     return false if digest.nil?
     BCrypt::Password.new(digest).is_password?(token)
+  end
+  
+  # Returns true if a password reset has expired.
+  def password_reset_expired?
+    reset_sent_at < 2.hours.ago
   end
 
   # Forgets a user.
@@ -67,6 +80,18 @@ class User < ApplicationRecord
   # Sends activation email.
   def send_activation_email
     UserMailer.account_activation(self).deliver_now
+  end
+
+  # Sets the password reset attributes.
+  def create_reset_digest
+    self.reset_token = User.new_token
+    update_attribute(:reset_digest,  User.digest(reset_token))
+    update_attribute(:reset_sent_at, Time.zone.now)
+  end
+
+  # Sends password reset email.
+  def send_password_reset_email
+    UserMailer.password_reset(self).deliver_now
   end
 end
 
