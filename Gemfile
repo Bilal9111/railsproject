@@ -26,6 +26,19 @@ gem 'fog',                     '1.40.0'
 
 ###
 
+###
+gem 'capistrano', '~> 3.7', '>= 3.7.1'
+gem 'capistrano-rails', '~> 1.2'
+gem 'capistrano-passenger', '~> 0.2.0'
+
+# Add this if you're using rbenv
+gem 'capistrano-rbenv', '~> 2.1'
+
+
+
+
+###
+
 
 
 gem 'will_paginate',           '3.1.5'
