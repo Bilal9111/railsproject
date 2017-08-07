@@ -30,14 +30,6 @@ require 'capistrano/passenger'
 # set :rvm_ruby_version, '2.4.0'
 require 'capistrano/ssh_doctor'
 
-require 'capistrano/rails'
-require 'capistrano/passenger'
-
-# If you are using rbenv add these lines:
- require 'capistrano/rbenv'
- set :rbenv_type, :user
- set :rbenv_ruby, '2.4.0'
-
 # If you are using rvm add these lines:
 # require 'capistrano/rvm'
 # set :rvm_type, :user
@@ -63,4 +55,4 @@ require 'capistrano/passenger'
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob("lib/capistrano/tasks/*.rake").each { |r| import r }
-Rake::Task[:production].invoke
+#Rake::Task[:production].invoke
